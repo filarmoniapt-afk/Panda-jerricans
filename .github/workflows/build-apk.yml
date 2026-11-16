@@ -1,4 +1,7 @@
-
+      - name: Corrigir configuração Gradle
+        run: |
+          sed -i '/^android.useAndroidX=true$/d' projeto/android/gradle.properties
+          sed -i 's/^org.gradle.jvmargs=.*/org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8/' projeto/android/gradle.properties
 name: Construir APK Panda
 
 on:
