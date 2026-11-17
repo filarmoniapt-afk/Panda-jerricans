@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8"><meta name="theme-color" content="#eef4e9"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Panda e os Jerricans de Gasóleo</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#eef4e9;font-family:system-ui,Arial;color:#18301d;text-align:center}
+main{max-width:650px;margin:auto;padding:14px}.stats{display:flex;justify-content:space-around;background:white;border-radius:14px;padding:12px;margin-bottom:10px}
+.stat small{display:block;color:#637466}.stat strong{font-size:24px}
+canvas{width:100%;height:auto;border-radius:16px;background:#a9ddf1;display:block;touch-action:none}
+.controls{display:flex;justify-content:center;align-items:center;gap:24px;margin:12px}
+button{border:0;border-radius:14px;padding:14px 25px;font-size:22px;font-weight:bold;background:#fff;box-shadow:0 2px 7px #0002;color:#18301d}
+#start{background:#f5c542;color:#332500;font-size:17px}
+#overlay{position:absolute;inset:0;background:#0008;color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:15px;border-radius:16px}
+.stage{position:relative}.sub{font-size:13px;color:#536b57}
+</style></head>
+<body><main>
+<h2>🐼 Panda e os Jerricans de Gasóleo</h2>
+<div class="stats"><div class="stat"><small>PONTUAÇÃO</small><strong id="score">0</strong></div><div class="stat"><small>VIDAS</small><strong id="lives">❤️❤️❤️</strong></div><div class="stat"><small>NÍVEL</small><strong id="level">1</strong></div></div>
+<div class="stage"><canvas id="arena" width="600" height="440"></canvas><div id="overlay"><div style="font-size:60px">🐼</div><h2>Apanha o gasóleo!</h2><p>Apanha os jerricans vermelhos antes que caiam ao chão.</p><button id="start">▶ COMEÇAR JOGO</button></div></div>
+<div class="controls"><button id="left">◀</button><span>Move o panda</span><button id="right">▶</button></div>
+<p class="sub">Usa os botões ou as setas do teclado. Cada jerrican vale 1 ponto!</p>
+</main>
+<script>
+(()=>{
+const c=document.getElementById('arena'),ctx=c.getContext('2d'),overlay=document.getElementById('overlay');
+let panda=300,items=[],score=0,lives=3,frame=0,running=false,keys={},raf=0;
+function can(x,y){
+ctx.save();ctx.translate(x,y);
+ctx.fillStyle='#b51220';ctx.strokeStyle='#690b13';ctx.lineWidth=4;
+ctx.beginPath();ctx.roundRect(-17,-20,34,42,6);ctx.fill();ctx.stroke();
+ctx.fillStyle='#e33b43';ctx.fillRect(-10,-25,20,8);ctx.strokeRect(-10,-25,20,8);
+ctx.fillStyle='#f5d8a5';ctx.font='bold 8px Arial';ctx.textAlign='center';ctx.fillText('DIESEL',0,4);
+ctx.fillStyle='#e8e8e8';ctx.fillRect(11,-14,4,24);
+ctx.restore();
+}
+function draw(){
+ctx.clearRect(0,0,600,440);
+let sky=ctx.createLinearGradient(0,0,0,350);sky.addColorStop(0,'#80c9ed');sky.addColorStop(1,'#d9f1c3');ctx.fillStyle=sky;ctx.fillRect(0,0,600,350);
+ctx.fillStyle='#79a85e';ctx.fillRect(0,350,600,90);
+ctx.font='42px serif';ctx.fillText('🌳',20,330);ctx.fillText('🌳',500,330);
+items.forEach(o=>can(o.x,o.y));
+ctx.font='65px serif';ctx.textAlign='center';ctx.fillText('🐼',panda,353);
+ctx.fillStyle='#704a24';ctx.fillRect(panda-38,360,76,12);ctx.fillStyle='#d7a44d';ctx.fillRect(panda-34,357,68,5);
+ctx.textAlign='left';
+}
+function finish(){running=false;overlay.style.display='flex';overlay.innerHTML='<div style="font-size:60px">🐼</div><h2>FIM DO JOGO!</h2><p>Apanhaste '+score+' jerricans de gasóleo!</p><button id="again">🔄 JOGAR NOVAMENTE</button>';document.getElementById('again').onclick=start}
+function update(){
+if(!running)return;frame++;
+if(keys.ArrowLeft||keys.left)panda-=6;if(keys.ArrowRight||keys.right)panda+=6;panda=Math.max(40,Math.min(560,panda));
+if(frame%Math.max(23,65-score/2|0)===0)items.push({x:35+Math.random()*530,y:0});
+items.forEach(o=>o.y+=3+Math.min(5,score*.08));
+items=items.filter(o=>{if(o.y>330&&o.y<390&&Math.abs(o.x-panda)<52){score++;document.getElementById('score').textContent=score;document.getElementById('level').textContent=1+Math.floor(score/10);return false}
+if(o.y>420){lives--;document.getElementById('lives').textContent='❤️'.repeat(lives);if(lives<=0)finish();return false}return true});
+draw();if(running)raf=requestAnimationFrame(update);
+}
+function start(){cancelAnimationFrame(raf);score=0;lives=3;frame=0;items=[];panda=300;keys={};document.getElementById('score').textContent='0';document.getElementById('lives').textContent='❤️❤️❤️';document.getElementById('level').textContent='1';overlay.style.display='none';running=true;update()}
+document.getElementById('start').onclick=start;
+document.addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight'].includes(e.key)){keys[e.key]=true;e.preventDefault()}});
+document.addEventListener('keyup',e=>keys[e.key]=false);
+function hold(id,k){let b=document.getElementById(id);b.addEventListener('pointerdown',e=>{e.preventDefault();keys[k]=true});['pointerup','pointerleave','pointercancel'].forEach(ev=>b.addEventListener(ev,()=>keys[k]=false))}
+hold('left','left');hold('right','right');draw();
+})();
+</script></body></html>

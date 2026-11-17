@@ -1,0 +1,24 @@
+# Panda e os Jerricans de Gasóleo — pacote de aplicação
+
+Este pacote inclui uma versão Android e uma versão web instalável.
+
+## Gerar o APK sem Windows (GitHub Actions)
+1. No Android, abre https://github.com e cria uma conta gratuita, se ainda não tiveres.
+2. Cria um repositório novo, por exemplo `panda-diesel`. Pode ser Public ou Private.
+3. No repositório, escolhe Add file > Upload files.
+4. Extrai este ZIP primeiro, e carrega o conteúdo da pasta `android/` e também a pasta `.github/` para o repositório, mantendo a estrutura de pastas. (A pasta `pwa/` é opcional.)
+5. Faz Commit changes.
+6. Abre o separador Actions do repositório e seleciona `Build Panda Diesel APK`.
+7. Se aparecer um botão Enable workflow, toca nele. Depois escolhe Run workflow > Run workflow.
+8. Quando terminar com visto verde, abre a execução e procura Artifacts.
+9. Descarrega `PandaDiesel-APK`, extrai o ZIP e instala `app-debug.apk` no Android.
+
+Se o GitHub mostrar um aviso de permissões ou pedir confirmação, aceita apenas a execução do workflow deste teu repositório.
+
+## Versão web instalável (PWA)
+A pasta `pwa/` contém a versão instalável com suporte offline. Para instalar, os ficheiros têm de estar publicados num endereço HTTPS. Depois abre o endereço no Chrome e escolhe Instalar aplicação / Adicionar ao ecrã inicial.
+
+## Notas
+- O jogo original foi preservado na versão Android.
+- O APK é compilado na nuvem pelo GitHub Actions; não precisas de Windows nem Android Studio.
+- Este pacote é o projeto-fonte com workflow de compilação, não é ainda o APK compilado.
