@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="pt">
 <head>
-<meta charset="utf-8"><meta name="theme-color" content="#eef4e9"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta charset="utf-8"><meta name="theme-color" content="#eef4e9"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icons/icon-192.png"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Panda e os Jerricans de Gasóleo</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#eef4e9;font-family:system-ui,Arial;color:#18301d;text-align:center}
@@ -61,4 +61,4 @@ document.addEventListener('keyup',e=>keys[e.key]=false);
 function hold(id,k){let b=document.getElementById(id);b.addEventListener('pointerdown',e=>{e.preventDefault();keys[k]=true});['pointerup','pointerleave','pointercancel'].forEach(ev=>b.addEventListener(ev,()=>keys[k]=false))}
 hold('left','left');hold('right','right');draw();
 })();
-</script></body></html>
+</script><script>if ("serviceWorker" in navigator) { window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js")); }</script></body></html>
